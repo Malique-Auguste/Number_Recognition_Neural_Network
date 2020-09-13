@@ -81,7 +81,7 @@ while True:
     Initialise(True, 20, 25)
     Run()
 ```
-. When testing the network the user simply has to draw his the number and then submit it; there is no need to enter a label.
+When testing the network the user simply has to draw his the number and then submit it; there is no need to enter a label.
 
 #### ui.py
 This file contains my custom classes use by the display file (example: button(pixels used for drawing).
