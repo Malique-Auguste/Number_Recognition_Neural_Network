@@ -63,7 +63,7 @@ The data associated with a single training value for a number is obtained as a 2
 
 #### Data Collection
 
-With the use of the display script, data can be collected if ```create_training_data = True```. T
+With the use of the display script, data can be collected if ```create_training_data = True```. 
 
 #### Data Storage
 
