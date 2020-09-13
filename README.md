@@ -18,18 +18,17 @@ while True:
 4. Run number_classifier.py to train
 
 #### Testing Network
-1. In display.py ensure that the following code is not commented out:
+1. When the training for each class has been completed a gui will pop up. You can then draw your number to test the network and press right click when you are complete.
+2. The output from the neural network will be displayed in the command line.
+3. The previous steps are then repeated.
+
+#### Adding Training Data
+1. In display.py ensure that ```create_training_data = True``` and  that the following code is not commented out:
 ```
 while True:
     Initialise(True, 20, 25)
     Run()
 ```
-2. When the training for each class has been completed a gui will pop up. You can then draw your number to test the network and press right click when you are complete.
-3. The output from the neural network will be displayed in the command line.
-4. The previous steps are then repeated.
-
-#### Adding Training Data
-1. In display.py ensure that ```create_training_data = True```.
 2. Run display.
 3. Left click on the pixels and hold to draw your number.
 4. Add the label by typing it into the text input box (hint: you can go into ui.py and change the default text value for the input box to avoid this step). 
