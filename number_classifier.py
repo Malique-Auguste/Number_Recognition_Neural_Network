@@ -340,9 +340,10 @@ def Gradient_Descent():
 
 def TestNetwork():
     global k, parameters_result, x_propogated
-    print("\nEnter anything besides a number to quit.\n")
+    print("\nEnter anything besides a number into the command line to quit or press the x on the gui to quit.\n")
     while True:
-        print("Enter Input: ")
+        print("Draw number")
+        display.create_training_data = False
         display.Initialise(False, 20, 25)
         display.Run()
         #exec(open(os.path.join(sys.path[0],"display.py")).read(), globals())
