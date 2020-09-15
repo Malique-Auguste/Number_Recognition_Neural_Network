@@ -98,7 +98,7 @@ These files describe the data stored in the training data.
 #### parameters
 These are the learnt parameters for each class.
 
-## Exterbal Modules Used
+## Extenal Modules Used
 1. Numpy v1.18.5 (for mathematics)
 2. Pygame v1.9.6 (for gui)
 3. Pickle (for reading and writing to files)
