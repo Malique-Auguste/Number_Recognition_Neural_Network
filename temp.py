@@ -5,14 +5,16 @@ import pickle
 import display
 import time
 
-train = False
+train = True
 
 #Input and ouput values that the neural network will train on
-x_list = np.array([])
-y_list = np.array([])
+x_list = np.array([[1, 1, 1], [1, 0, 0], [1, 1, 0], [1, 0, 1]])
+y_list = np.array([[1,0], [1, 0], [0, 1], [0, 1]])
 
 #weights
 parameters = []
+#parameters calculated for each class
+parameters_result = []
 
 #The error calculated for a single x value
 small_delta = []
@@ -35,11 +37,13 @@ lambada = 0.0005
 max_iterations = 5000 #5000
 
 
-def Initialise():
+def Initialise(only_param = False):
     global x_propogated, m, l, k, total_delta, small_delta, y_list, x_list, parameters
 
     #Initialises the parameters of each layer to random values.
     parameters = [np.random.normal(0, 1, size= (200, 625)), np.random.normal(0, 1, size= (20, 201)), np.random.normal(0, 1, size =(7,21))]
+    if only_param:
+        return
 
     print("\nBeginning initialisation...")
 
@@ -183,17 +187,18 @@ def Loss(class_return = 0):
     cost += Regularise_Parameters(parameters)
     return cost
 
-def Save_Parameters(parameters):
-    file = open(os.path.join(sys.path[0],"parameters"), "wb")
+def Save_Parameters(class_, parameters):
+    file = open(os.path.join(sys.path[0],"parameters", f"parameters{class_}"), "wb")
     pickle.dump(parameters, file)
     file.close()
 
 def Load_Parameters():
-    global parameters
+    global parameters_result
     i = 0
-    file_ = open(os.path.join(sys.path[0], "parameters"), "rb")
-    parameters = pickle.load(file_)
-    i += 1
+    while i < len(os.listdir(os.path.join(sys.path[0], "parameters"))):
+        file_ = open(os.path.join(sys.path[0], "parameters", f"parameters{i}"), "rb")
+        parameters_result.append(pickle.load(file_))
+        i += 1
 
 def Back_Propogation():
     global l, x_list, y_list, small_delta, total_delta, parameters, m
@@ -250,7 +255,7 @@ def Back_Propogation():
         change /= m
 
 def Gradient_Descent():
-    global parameters, max_iterations, k, total_delta, h
+    global parameters, parameters_result, max_iterations, k, total_delta, h
     print("Beginning gradient descent...\n")
     
     #if the cost begins to increase the lowest possible cost and its corresponding data is recorded
@@ -263,6 +268,8 @@ def Gradient_Descent():
     
     #Back propogates till max_iteration is reached
     i = 0
+    Initialise(True)
+
     t = time.time()
     while i < max_iterations:
         if i % 100 == 0:
@@ -286,10 +293,10 @@ def Gradient_Descent():
 
         i += 1
 
-    Save_Parameters(parameters)
+    Save_Parameters(0,parameters)
 
 def TestNetwork():
-    global k, x_propogated
+    global k, parameters_result, x_propogated
     print("\nEnter anything besides a number into the command line to quit or press the x on the gui to quit.\n")
     while True:
         print("Draw number")
