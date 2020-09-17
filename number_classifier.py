@@ -32,44 +32,39 @@ m = 7
 
 learning_rate = 0.1
 lambada = 0.0005
-max_iterations = 5000 #5000
+max_iterations = 10000 #5000
 
 
 def Initialise():
     global x_propogated, m, l, k, total_delta, small_delta, y_list, x_list, parameters
-
-    #Initialises the parameters of each layer to random values.
-    parameters = [np.random.normal(0, 1, size= (200, 625)), np.random.normal(0, 1, size= (20, 201)), np.random.normal(0, 1, size =(7,21))]
-
     print("\nBeginning initialisation...")
 
     x_list = np.load(os.path.join(sys.path[0], 'data', "x_list.npy"))
     y_list = np.load(os.path.join(sys.path[0], 'data', "y_list.npy"))
-    #print(y_list)
-    #Creates the shape of x_propogated from the list of parameters
-    for param in parameters:
-        x_propogated.append(np.array(param))
-    
-    m = len(y_list)
-    l = len(parameters)
 
+    m = len(y_list)
     k = 1
     for y in y_list:
         if y > k:
-            k = int(y)
+            k = int(y) + 1
+    print(k)
 
-    li = np.zeros((y_list.shape[0], k + 1))
+    li = np.zeros((y_list.shape[0], k))
     i = 0
     while i < len(y_list):
         li[i][y_list[i]] = 1
-        '''if y_list[i] == 0:
-            li.append([1,0,0])
-        elif y_list[i] == 1:
-            li.append([0, 1, 0])
-        else:
-            li.append([0,0,1])'''
         i += 1
     y_list = li
+
+    print(y_list.shape)
+    #Initialises the parameters of each layer to random values.
+    parameters = [np.random.normal(0, 1, size= (200, 625)), np.random.normal(0, 1, size= (100, 201)), np.random.normal(0, 1, size =(k,101))]
+    l = len(parameters)
+
+    #Creates the shape of x_propogated from the list of parameters
+    for param in parameters:
+        x_propogated.append(np.array(param))
+    print(x_propogated[l-1].shape)
   
 def Sigmoid(x, param):
     z = (np.matmul(x,  np.transpose(param)))
@@ -174,7 +169,7 @@ def Loss(class_return = 0):
     cost = (np.matmul(np.negative(y_list_).T, np.log(h_)) - np.matmul((1 - y_list_).T, np.log(1 - h_)) + Regularise_Parameters(parameters)) / m 
     
     i = 1
-    while i <= k:
+    while i < k:
         h_ = np.transpose(np.transpose(h)[0][np.newaxis])
         y_list_ = np.transpose(np.transpose(y_list)[0][np.newaxis])
         cost += (np.matmul(np.negative(y_list_).T, np.log(h_)) - np.matmul((1 - y_list_).T, np.log(1 - h_)))
@@ -190,10 +185,8 @@ def Save_Parameters(parameters):
 
 def Load_Parameters():
     global parameters
-    i = 0
     file_ = open(os.path.join(sys.path[0], "parameters"), "rb")
     parameters = pickle.load(file_)
-    i += 1
 
 def Back_Propogation():
     global l, x_list, y_list, small_delta, total_delta, parameters, m
@@ -250,7 +243,7 @@ def Back_Propogation():
         change /= m
 
 def Gradient_Descent():
-    global parameters, max_iterations, k, total_delta, h
+    global parameters, max_iterations, total_delta, h
     print("Beginning gradient descent...\n")
     
     #if the cost begins to increase the lowest possible cost and its corresponding data is recorded
@@ -289,7 +282,7 @@ def Gradient_Descent():
     Save_Parameters(parameters)
 
 def TestNetwork():
-    global k, x_propogated
+    global x_propogated
     print("\nEnter anything besides a number into the command line to quit or press the x on the gui to quit.\n")
     while True:
         print("Draw number")
