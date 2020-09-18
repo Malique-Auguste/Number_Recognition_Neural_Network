@@ -229,8 +229,7 @@ def Run():
             if event.type == py.QUIT:
                 raise SystemExit()
 
-'''
+
 while True:
     Initialise(True, 20, 25)
     Run()
-'''

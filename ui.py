@@ -48,7 +48,7 @@ class button(ui_object):
         py.display.update()
 
 class input_field(ui_object):
-    text = "6"
+    text = "4"
     font = py.font.Font(py.font.get_default_font(), 36)
     text_surface = py.surface
 
