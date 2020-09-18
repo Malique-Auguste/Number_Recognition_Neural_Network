@@ -5,7 +5,7 @@ import pickle
 import display
 import time
 
-train = False
+train = True 
 
 #Input and ouput values that the neural network will train on
 x_list = np.array([])
@@ -32,7 +32,7 @@ m = 7
 
 learning_rate = 0.1
 lambada = 0.0005
-max_iterations = 10000 #5000
+max_iterations = 7000 #5000
 
 
 def Initialise():
@@ -46,8 +46,8 @@ def Initialise():
     k = 1
     for y in y_list:
         if y > k:
-            k = int(y) + 1
-    print(k)
+            k = int(y)
+    k += 1
 
     li = np.zeros((y_list.shape[0], k))
     i = 0
@@ -56,7 +56,6 @@ def Initialise():
         i += 1
     y_list = li
 
-    print(y_list.shape)
     #Initialises the parameters of each layer to random values.
     parameters = [np.random.normal(0, 1, size= (200, 625)), np.random.normal(0, 1, size= (100, 201)), np.random.normal(0, 1, size =(k,101))]
     l = len(parameters)
@@ -64,7 +63,6 @@ def Initialise():
     #Creates the shape of x_propogated from the list of parameters
     for param in parameters:
         x_propogated.append(np.array(param))
-    print(x_propogated[l-1].shape)
   
 def Sigmoid(x, param):
     z = (np.matmul(x,  np.transpose(param)))
@@ -135,7 +133,7 @@ def Regularise_Parameters(parameters, sum_ = True):
             i += 1
     return r * lambada
 
-def Loss(class_return = 0):
+def Loss():
     global x_list, y_list, x_propogated, m, l, k, parameters, h
     #Calculates the total error of the neural network 
     '''
@@ -293,7 +291,21 @@ def TestNetwork():
         x_list_input = np.load(os.path.join(sys.path[0], "data", "user_input.npy"))
 
         Forward_Propogate(x_list_input)
-        print(f"Probablility of entered values is: {(x_propogated[l - 1])}")
+        probabilities = np.zeros((3,2))
+        i = 0
+        while i < len(x_propogated[l-1]):
+            if x_propogated[l-1][i] > probabilities[0,1]:
+                probabilities[0,0] = i
+                probabilities[0,1] = x_propogated[l-1][i]
+            elif x_propogated[l-1][i] > probabilities[1,1]:
+                probabilities[1,0] = i
+                probabilities[1,1] = x_propogated[l-1][i]
+            elif x_propogated[l-1][i] > probabilities[2,1]:
+                probabilities[2,0] = i
+                probabilities[2,1] = x_propogated[l-1][i]
+            i += 1
+        for probability in probabilities:
+            print(f"Probablility of entered values equaling {probability[0]} is: {round(probability[1] * 100, 2)}%")
         print()
 
 
@@ -305,10 +317,5 @@ if train:
 else:
     Initialise()
     Load_Parameters()
+    print(f"Current loss: {Loss()}")
     TestNetwork()
-'''
-Initialise()
-t = time.time()
-print(Loss())
-print(time.time() - t)
-'''
