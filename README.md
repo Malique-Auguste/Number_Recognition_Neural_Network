@@ -2,7 +2,7 @@
 
 ## What is this?
 
-This is my implementation of the back-propogation algorithm to classify handwritten digits from 0-9, without an external machine learning library. It utillises both a command line and gui interface.
+This is my implementation of the back-propogation algorithm to classify handwritten digits from 0-5, without an external machine learning library. It utillises both a command line and gui interface.
 
 ## How to use this?
 
@@ -47,10 +47,10 @@ parameters = [np.random.normal(0, 1, size= (100, 625))...
 
 Do not change the amount of input data in the first layer as that is constant (625 is the number of pixels in each number) nor the number of neurons in the last layer. The below example removes a hidden layer from the network.
 ```
-parameters = [np.random.normal(0, 1, size= (200, 625)), np.random.normal(0, 1, size= (10, 201)), np.random.normal(0, 1, size =(1, 11))]
+parameters = [np.random.normal(0, 1, size= (200, 625)), np.random.normal(0, 1, size= (100, 201)), np.random.normal(0, 1, size =(k, 101))]
 ```
 ```
-parameters = [np.random.normal(0, 1, size= (200, 625)), np.random.normal(0, 1, size =(1, 201))]
+parameters = [np.random.normal(0, 1, size= (200, 625)), np.random.normal(0, 1, size =(k, 201))]
 ```
 
 When removing a layer ensure to update the number of inputs for the layer after the layer that was removed.
@@ -96,7 +96,10 @@ This file is used to store the input data created when testing the network.
 These files describe the data stored in the training data.
 
 #### parameters
-These are the learnt parameters for each class.
+These are the learnt parameters(weights).
+
+#### parameters_temp
+These are the learnt parameters(weights) that are updated twice while the network is training. It is meant to minimise the problems that can occur if the program fails midway through its training.
 
 ## Extenal Modules Used
 1. Numpy v1.18.5 (for mathematics)
@@ -104,4 +107,4 @@ These are the learnt parameters for each class.
 3. Pickle (for reading and writing to files)
 4. Os (for reading and writing to files)
 5. Sys (for geting current directory)
-
+6. Time (for recording the time taken to train a neural network)
