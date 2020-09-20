@@ -32,7 +32,7 @@ m = 7
 
 learning_rate = 0.1
 lambada = 0.0005
-max_iterations = 7000 #5000
+max_iterations = 8000 #5000
 
 
 def Initialise():
@@ -176,10 +176,15 @@ def Loss():
     cost += Regularise_Parameters(parameters)
     return cost
 
-def Save_Parameters(parameters):
-    file = open(os.path.join(sys.path[0],"parameters"), "wb")
-    pickle.dump(parameters, file)
-    file.close()
+def Save_Parameters(parameters, temp = False):
+    if temp:
+        file = open(os.path.join(sys.path[0],"parameters_temp"), "wb")
+        pickle.dump(parameters, file)
+        file.close()
+    else:
+        file = open(os.path.join(sys.path[0],"parameters"), "wb")
+        pickle.dump(parameters, file)
+        file.close()
 
 def Load_Parameters():
     global parameters
@@ -254,17 +259,20 @@ def Gradient_Descent():
     
     #Back propogates till max_iteration is reached
     i = 0
+    tt = time.time()
     t = time.time()
     while i < max_iterations:
         if i % 100 == 0:
             print(f"Loss: {Loss()}\tIteration: {i}")
             if not i == 0:
-                print(f"Time taken: {round(time.time() - t, 2)}")
+                print(f"Time taken: {round(time.time() - t, 2)}s")
                 t = time.time()
         elif i == max_iterations - 1:
             print(f"Loss: {Loss()}\tIteration: {i}")
-            print(f"Time taken: {round(time.time() - t, 2)}\n")
+            print(f"Time taken: {round(time.time() - t, 2)}s\n")
             #print(f"Parameters: {parameters}")
+        elif i == round(max_iterations/3):
+            Save_Parameters(parameters, True)
 
         Back_Propogation()
         
@@ -276,7 +284,7 @@ def Gradient_Descent():
             j += 1
 
         i += 1
-
+    print(f"Total Time Taken: {round((time.time()-tt)/60, 2)}minutes")
     Save_Parameters(parameters)
 
 def TestNetwork():
